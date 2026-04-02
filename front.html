@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Прогноз опухоли мозга</title>
+</head>
+<body>
+<h1>Проверка наличия опухоли</h1>
+
+<input type="file" id="fileInput" accept="image/*">
+<button onclick="uploadFile()">Отправить</button>
+
+<p id="result"></p>
+
+<script>
+    async function uploadFile() {
+        const fileInput = document.getElementById('fileInput');
+        const resultEl = document.getElementById('result');
+
+        if (!fileInput.files.length) {
+            resultEl.innerText = "Выберите файл!";
+            return;
+        }
+
+        const file = fileInput.files[0];
+        const formData = new FormData();
+        formData.append("file", file);
+
+        try {
+            const response = await fetch("/predict", {
+                method: "POST",
+                body: formData
+            });
+
+            if (!response.ok) {
+                resultEl.innerText = `Ошибка: ${response.status}`;
+                return;
+            }
+
+            const data = await response.json();
+            const prob = (data.tumor_probability * 100).toFixed(2);
+            resultEl.innerText = `Вероятность опухоли: ${prob}%`;
+        } catch (error) {
+            resultEl.innerText = `Ошибка: ${error}`;
+        }
+    }
+</script>
+</body>
+</html>
