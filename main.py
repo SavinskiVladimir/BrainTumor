@@ -26,12 +26,24 @@ def frontend():
         return JSONResponse({"error": "front.html не найден!"})
     return FileResponse(str(html_path), media_type="text/html")
 
+def preprocess(image):
+    image = image.resize((128, 128))  # Модель ожидает 128x128
+    image = np.array(image) / 255.0
+    if len(image.shape) == 3 and image.shape[-1] == 4:
+        image = image[:, :, :3]  # Убираем альфа-канал
+    return np.expand_dims(image, axis=0)
+
 @app.post("/predict")
 async def predict(file: UploadFile = File(...)):
-    image_data = await file.read()
-    image = Image.open(io.BytesIO(image_data)).resize((224, 224))
-    image_array = np.array(image) / 255.0
-    image_array = np.expand_dims(image_array, axis=0)
-    prediction = model.predict(image_array)
-    tumor_prob = float(prediction[0][0])
-    return JSONResponse(content={"tumor_probability": tumor_prob})
+    try:
+        image_data = await file.read()
+        image = Image.open(io.BytesIO(image_data)).convert('RGB')
+        processed_image = preprocess(image)
+        prediction = model.predict(processed_image, verbose=0)
+        tumor_prob = float(prediction[0][0])
+        return JSONResponse(content={"tumor_probability": tumor_prob})
+    except Exception as e:
+        return JSONResponse(
+            content={"error": str(e)},
+            status_code=400
+        )
