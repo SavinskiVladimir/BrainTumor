@@ -5,127 +5,52 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Определение опухолей мозга</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        /* Стили оставляем прежними */
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-        }
-        .container {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            padding: 40px;
-            max-width: 500px;
-            width: 100%;
-            text-align: center;
-        }
-        h1 { color: #333; margin-bottom: 30px; font-size: 28px; }
-        .upload-area {
-            border: 3px dashed #667eea;
-            border-radius: 15px;
-            padding: 40px;
-            margin: 20px 0;
-            background: #f8f9ff;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-        .upload-area:hover { border-color: #764ba2; background: #f0f2ff; }
-        .upload-area.dragover { border-color: #764ba2; background: #e8ecff; }
-        #fileInput { display: none; }
-        .upload-icon { font-size: 48px; margin-bottom: 15px; }
-        .upload-text { color: #666; font-size: 18px; margin-bottom: 10px; }
-        .upload-subtext { color: #999; font-size: 14px; }
-
-        #preview {
-            max-width: 300px;
-            max-height: 300px;
-            border-radius: 10px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-            margin: 20px auto;
-            display: none;
-            object-fit: cover;
-        }
-
-        .button-group {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin-top: 10px;
-            flex-wrap: wrap;
-        }
-        button {
-            padding: 15px 30px;
-            border: none;
-            border-radius: 50px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            flex: 1;
-            max-width: 220px;
-        }
-        #uploadBtn { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
-        #gradcamBtn { background: linear-gradient(135deg, #ff6b6b, #ee5a24); color: white; }
-        button:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
-        button:disabled { opacity: 0.6; cursor: not-allowed; }
-
-        .result {
-            margin-top: 30px;
-            padding: 25px;
-            border-radius: 15px;
-            font-size: 18px;
-            font-weight: 600;
-            min-height: 80px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-        .result.healthy { background: #d4edda; color: #155724; border: 2px solid #c3e6cb; }
-        .result.tumor { background: #f8d7da; color: #721c24; border: 2px solid #f5c6cb; }
-        .result.loading { background: #fff3cd; color: #856404; border: 2px solid #ffeaa7; }
-        .probability { font-size: 24px; margin-top: 10px; font-weight: bold; }
-        .gradcam-info { font-size: 14px; color: #666; margin-top: 10px; }
-
-        #gradcamImage {
-            max-width: 100%;
-            max-height: 400px;
-            border-radius: 10px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-            margin-top: 15px;
-            display: none;
-        }
-
-        @media (max-width: 600px) {
-            .container { padding: 20px; margin: 10px; }
-            h1 { font-size: 24px; }
-            .button-group { flex-direction: column; }
-        }
+            min-height: 100vh; display:flex; flex-direction:column; align-items:center; padding:20px; }
+        .container { background:white; border-radius:20px; box-shadow:0 20px 40px rgba(0,0,0,0.1);
+            padding:40px; max-width:500px; width:100%; text-align:center; }
+        h1 { color:#333; margin-bottom:30px; font-size:28px; }
+        .upload-area { border:3px dashed #667eea; border-radius:15px; padding:40px; margin:20px 0; background:#f8f9ff; cursor:pointer; transition:all 0.3s ease; }
+        .upload-area:hover { border-color:#764ba2; background:#f0f2ff; }
+        #fileInput { display:none; }
+        .upload-icon { font-size:48px; margin-bottom:15px; }
+        .upload-text { color:#666; font-size:18px; margin-bottom:10px; }
+        .upload-subtext { color:#999; font-size:14px; }
+        #preview { max-width:300px; max-height:300px; border-radius:10px; margin:20px auto; display:none; object-fit:cover; }
+        .button-group { display:flex; gap:15px; justify-content:center; margin-top:10px; flex-wrap:wrap; }
+        button { padding:15px 30px; border:none; border-radius:50px; font-size:16px; font-weight:600; cursor:pointer; flex:1; max-width:220px; }
+        #uploadBtn { background:linear-gradient(135deg, #667eea 0%, #764ba2 100%); color:white; }
+        #gradcamBtn { background:linear-gradient(135deg,#ff6b6b,#ee5a24); color:white; }
+        button:disabled { opacity:0.6; cursor:not-allowed; }
+        .result { margin-top:30px; padding:25px; border-radius:15px; font-size:18px; font-weight:600;
+            min-height:80px; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+        .result.healthy { background:#d4edda; color:#155724; border:2px solid #c3e6cb; }
+        .result.tumor { background:#f8d7da; color:#721c24; border:2px solid #f5c6cb; }
+        .result.loading { background:#fff3cd; color:#856404; border:2px solid #ffeaa7; }
+        .probability { font-size:24px; margin-top:10px; font-weight:bold; }
+        .gradcam-info { font-size:14px; color:#666; margin-top:10px; }
+        #gradcamImage { max-width:100%; max-height:400px; border-radius:10px; margin-top:15px; display:none; }
     </style>
 </head>
 <body>
 <div class="container">
     <h1>Определение опухолей мозга</h1>
-
     <div class="upload-area" onclick="document.getElementById('fileInput').click()">
         <div class="upload-icon">📁</div>
         <div class="upload-text">Нажмите или перетащите изображение</div>
         <div class="upload-subtext">JPG, PNG, TIF, TIFF</div>
     </div>
-
     <input type="file" id="fileInput" accept="image/*,.tif,.tiff">
     <img id="preview" alt="Предпросмотр">
-
     <div class="button-group">
         <button id="uploadBtn" onclick="uploadFile()" disabled>Быстрый анализ</button>
-        <button id="gradcamBtn" onclick="uploadWithGradcam()" disabled>Анализ с построением карты признаков</button>
+        <button id="gradcamBtn" onclick="uploadWithGradcam()" disabled>
+            Анализ с построением карты признаков
+        </button>
     </div>
-
     <div id="result" class="result"></div>
     <img id="gradcamImage" alt="Grad-CAM результат">
 </div>
@@ -137,163 +62,49 @@
     const gradcamBtn = document.getElementById('gradcamBtn');
     const resultEl = document.getElementById('result');
     const gradcamImage = document.getElementById('gradcamImage');
-    const uploadArea = document.querySelector('.upload-area');
-    fileInput.addEventListener('change', async function() {
+
+    fileInput.addEventListener('change', function () {
         preview.style.display = 'none';
         preview.src = '';
         uploadBtn.disabled = gradcamBtn.disabled = true;
-
         if (!this.files?.[0]) return;
-
         const file = this.files[0];
-        console.log('📁 Файл:', file.name, `${(file.size/1024/1024).toFixed(1)}MB`, file.type);
-
-        if (file.size > 15 * 1024 * 1024) {
-            showResult('Файл слишком большой (макс. 15MB)', 'error');
-            return;
-        }
-
-        if (file.name.toLowerCase().match(/\.(tif|tiff)$/)) {
-            console.log('🖼️ TIF/TIFF — конвертируем для предпросмотра');
-            await convertTiffPreview(file);
-            return;
-        }
-
         const reader = new FileReader();
         reader.onload = (e) => {
-            const testImg = new Image();
-            testImg.onload = () => {
-                preview.src = e.target.result;
-                preview.style.display = 'block';
-                uploadBtn.disabled = gradcamBtn.disabled = false;
-            };
-            testImg.onerror = () => showResult('Неверный формат', 'error');
-            testImg.src = e.target.result;
+            preview.src = e.target.result;
+            preview.style.display = 'block';
+            uploadBtn.disabled = gradcamBtn.disabled = false;
         };
-        reader.onerror = () => showResult('Ошибка чтения', 'error');
         reader.readAsDataURL(file);
     });
 
-    async function convertTiffPreview(file) {
-        const formData = new FormData();
-        formData.append('file', file);
-
-        try {
-            showResult('Конвертируем TIF...', 'loading');
-            const response = await fetch('/preview_tiff', {
-                method: 'POST',
-                body: formData
-            });
-
-            if (!response.ok) throw new Error(`HTTP ${response.status}`);
-
-            const data = await response.json();
-            if (data.preview_url) {
-                preview.src = data.preview_url + `?t=${Date.now()}`;
-                preview.style.display = 'block';
-                uploadBtn.disabled = gradcamBtn.disabled = false;
-                showResult('TIF готов к анализу!', 'loading');
-            } else {
-                showResult('Ошибка конвертации TIF', 'error');
-            }
-        } catch (e) {
-            console.error('TIF ошибка:', e);
-            showResult(`TIF ошибка: ${e.message}`, 'error');
-        }
-    }
-
-    // Drag & Drop
-    ['dragover', 'dragenter'].forEach(event => {
-        uploadArea.addEventListener(event, (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            uploadArea.classList.add('dragover');
-        });
-    });
-    ['dragleave', 'drop'].forEach(event => {
-        uploadArea.addEventListener(event, (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            uploadArea.classList.remove('dragover');
-            if (event === 'drop' && e.dataTransfer.files.length) {
-                fileInput.files = e.dataTransfer.files;
-                fileInput.dispatchEvent(new Event('change', { bubbles: true }));
-            }
-        });
-    });
-
     async function uploadFile() {
-        await sendRequest('/predict', 'Быстрый анализ', uploadBtn);
+        await sendRequest('/predict');
     }
 
     async function uploadWithGradcam() {
-        await sendRequest('/predict_with_gradcam', 'Анализ с построением карты признаков', gradcamBtn);
+        await sendRequest('/predict_with_gradcam');
     }
 
-    async function sendRequest(url, btnText, activeBtn) {
-        if (!fileInput.files.length) {
-            showResult('Выберите изображение!', 'error');
-            return;
-        }
-
+    async function sendRequest(url) {
         const file = fileInput.files[0];
         const formData = new FormData();
         formData.append("file", file);
-
-        uploadBtn.disabled = gradcamBtn.disabled = true;
-        activeBtn.textContent = '⏳ Обработка...';
-        showResult('Анализируем изображение...', 'loading');
-
         try {
             const response = await fetch(url, { method: "POST", body: formData });
-            if (!response.ok) throw new Error(`HTTP ${response.status}`);
-
             const data = await response.json();
-            console.log('Ответ:', data);
-
-            if (url === '/predict_with_gradcam' && data.gradcam_image) {
-                showGradcamResult(data);
-                gradcamImage.src = data.gradcam_image + `?t=${Date.now()}`;
-                gradcamImage.style.display = 'block';
-            } else {
-                showPrediction(data.tumor_probability);
-                gradcamImage.style.display = 'none';
+            if (!response.ok) {
+                resultEl.innerText = "Ошибка: " + (data.error || "неизвестная ошибка");
+                return;
             }
-        } catch (error) {
-            console.error('Ошибка:', error);
-            showResult(`Ошибка: ${error.message}`, 'error');
-            gradcamImage.style.display = 'none';
-        } finally {
-            uploadBtn.disabled = gradcamBtn.disabled = false;
-            activeBtn.textContent = btnText;
+            resultEl.innerText = data.label + " (" + (data.tumor_probability*100).toFixed(1) + "%)";
+            if (data.gradcam_image) {
+                gradcamImage.src = data.gradcam_image;
+                gradcamImage.style.display = 'block';
+            }
+        } catch (e) {
+            resultEl.innerText = "Ошибка соединения с сервером";
         }
-    }
-
-    function showPrediction(probability) {
-        const probPercent = (probability * 100).toFixed(1);
-        const isHealthy = probability < 0.5;
-        resultEl.innerHTML = `
-                ${isHealthy ? '<br>Нет подозрений на опухоль' : '<br>Подозрение на опухоль'}
-                <div class="probability">${probPercent}%</div>
-            `;
-        resultEl.className = `result ${isHealthy ? 'healthy' : 'tumor'}`;
-    }
-
-    function showGradcamResult(data) {
-        const probPercent = (data.tumor_probability * 100).toFixed(1);
-        const isHealthy = data.tumor_probability < 0.5;
-        resultEl.innerHTML = `
-                <div style="font-size: 22px; margin-bottom: 12px;">${data.label}</div>
-                <div class="probability">${probPercent}%</div>
-                <div class="gradcam-info">Проанализированные изображения</div>
-            `;
-        resultEl.className = `result ${isHealthy ? 'healthy' : 'tumor'}`;
-    }
-
-    function showResult(text, type) {
-        resultEl.innerHTML = text;
-        resultEl.className = `result ${type}`;
-        gradcamImage.style.display = 'none';
     }
 </script>
 </body>
