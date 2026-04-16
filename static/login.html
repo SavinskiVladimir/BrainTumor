@@ -1,43 +1,42 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <title>Вход</title>
-    <style>
-        body { font-family:'Segoe UI'; background:linear-gradient(135deg,#667eea,#764ba2);
-            display:flex; justify-content:center; align-items:center; height:100vh; }
-        .container { background:white; padding:40px; border-radius:20px; width:300px; text-align:center; }
-        input { width:100%; padding:10px; margin:10px 0; }
-        button { width:100%; padding:10px; background:#667eea; color:white; border:none; border-radius:10px; }
-    </style>
+<meta charset="UTF-8">
+<title>Вход</title>
+<link rel="stylesheet" href="/static/styles.css">
 </head>
-<body>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<body class="auth-page">
+
 <div class="container">
-    <h2>Вход</h2>
-    <input id="email" placeholder="Email">
-    <input id="password" type="password" placeholder="Пароль">
-    <button onclick="login()">Войти</button>
-    <p><a href="/register">Регистрация</a></p>
+<h2>Вход</h2>
+
+<input id="email" placeholder="Email">
+<input id="password" type="password" placeholder="Пароль">
+
+<button onclick="login()">Войти</button>
+
+<p><a href="/register">Регистрация</a></p>
 </div>
 
 <script>
-    async function login() {
-        const email = document.getElementById("email").value;
-        const password = document.getElementById("password").value;
+async function login() {
+    const res = await fetch("/api/login", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            email: email.value,
+            password: password.value
+        })
+    });
 
-        const res = await fetch("/api/login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, password })
-        });
-
-        const data = await res.json();
-        if (res.ok) {
-            window.location.href = "/app";
-        } else {
-            alert(data.error || "Ошибка входа");
-        }
+    if (res.ok) {
+        window.location.href = "/app";
+    } else {
+        alert("Ошибка входа");
     }
+}
 </script>
+
 </body>
 </html>
