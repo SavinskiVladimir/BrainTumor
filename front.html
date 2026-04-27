@@ -23,6 +23,8 @@
 <div class="button-group">
     <button id="uploadBtn" onclick="uploadFile()" disabled>Быстрый анализ</button>
     <button id="gradcamBtn" onclick="uploadWithGradcam()" disabled>Grad-CAM</button>
+    <button onclick="location.href='/history'">История</button>
+    <button class="logout-btn" onclick="logout()">Выйти</button>
 </div>
 
 <div id="result" class="result"></div>
@@ -79,7 +81,16 @@ function uploadFile() {
 function uploadWithGradcam() {
     send("/predict_with_gradcam");
 }
+
+async function logout() {
+    await fetch("/api/logout", {
+        method: "POST",
+        credentials: "include"
+    });
+    window.location.href = "/login";
+}
 </script>
+
 
 </body>
 </html>

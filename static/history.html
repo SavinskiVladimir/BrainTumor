@@ -20,7 +20,7 @@
 
 <script>
 async function load() {
-    const res = await fetch("/history");
+    const res = await fetch("/api/history");
     const data = await res.json();
 
     list.innerHTML = data.map(item => `
@@ -33,7 +33,6 @@ async function load() {
         </div>
     `).join("");
 }
-
 load();
 </script>
 

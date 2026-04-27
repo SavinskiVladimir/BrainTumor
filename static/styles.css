@@ -135,3 +135,20 @@ button {
     width: 80px;
     border-radius: 8px;
 }
+
+.logout-btn {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    background-color: #e53935;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    z-index: 1000;
+}
+
+.logout-btn:hover {
+    background-color: #c62828;
+}
